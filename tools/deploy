@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if ! [ test -n "${var-}" ]; then 
+  echo "AWSENV_CF_DISTRIBUTION is not set, cannot continue." >&2
+  exit 1
+fi
+
+mydir="$(cd "$(dirname "$0")" && pwd)"
+cd "$mydir/.."
+
+npm run build
+
+aws s3 sync ./dist s3://findvax-static\
+ --delete\
+ --exclude ".DS_Store"
+
+aws cloudfront create-invalidation\
+  --distribution-id=$AWSENV_CF_DISTRIBUTION\
+  --paths /\*\
+  > /dev/null

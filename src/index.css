@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind forms;
+
+@import "./font-definitions.css";
+
+body{
+  @apply font-body
+         bg-blue-100;
+}
+
+address a{
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+.availabilityTable{
+  @apply w-full table-fixed border-collapse border border-gray-800;
+
+  td{
+    @apply w-1/2 p-1 border border-gray-300 text-black;
+  }
+
+  thead{
+    td{
+      @apply bg-gray-100 font-bold;
+    }
+  }
+}
+
+dl.siteDetails{
+  @apply mb-5;
+
+  dt{
+    @apply font-bold;
+  }
+  dd{
+    @apply mb-5;
+  }
+}
+
+.loader {
+  @apply ease-linear mx-auto rounded-full border-8 border-t-8 border-gray-200;
+  border-top-color: #3498db;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.toggle-checkbox:checked {
+  @apply: right-0 border-green-400;
+  right: 0;
+  border-color: #68D391;
+}
+.toggle-checkbox:checked + .toggle-label {
+  @apply: bg-green-400;
+  background-color: #68D391;
+}

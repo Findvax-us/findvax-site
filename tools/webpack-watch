@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+NODE_ENV=production
+mydir="$(cd "$(dirname "$0")" && pwd)"
+
+npm run watch &
+http-server ./dist -p 8000 -c -1 --cors

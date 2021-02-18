@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  </head>
+  <body>
+    <div>
+      
+      <nav class="bg-white px-6 py-4 shadow">
+          <div class="flex flex-col container mx-auto md:flex-row md:items-center md:justify-between">
+              <div class="flex justify-between items-center">
+                  <div>
+                      <a href="#" class="text-gray-800 text-xl font-bold md:text-2xl">Findvax.us</a>
+                  </div>
+              </div>
+              <div class="md:flex flex-col md:flex-row md:-mx-4">
+                  <a href="#" class="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0">About</a>
+              </div>
+          </div>
+      </nav>
+
+      <div class="px-6 py-8">
+        <div class="flex container mx-auto">
+          <div class="w-full"
+               x-data="locationsController()"
+               x-init="() => { fetchLocations() }">
+              
+            <!-- filters section -->
+            <div class="mx-auto max-w-6xl">
+              <p class="text-xl font-bold text-gray-700 md:text-2xl"
+                  x-text="t('ui.filters.title')"></p>
+              <div class="flex items-center justify-evenly mx-auto max-w-6xl px-10 py-6">
+                <div>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                      <input type="checkbox" 
+                             name="toggleAvailableOnly" 
+                             id="toggleAvailableOnly" 
+                             class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                             x-model="filterShowOnlyAvailable"
+                             x-on:change="filterLocations"/>
+                      <label for="toggleAvailableOnly" 
+                             class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                  </div>
+                  <label for="toggleAvailableOnly" 
+                         x-text="t('ui.filters.available-only')"></label>
+                </div>
+                <div>
+                  <label for="toggleZip"
+                         x-text="t('ui.filters.zip')"></label>
+                  <select class="focus:ring-indigo-500 focus:border-indigo-500"
+                          id="toggleZip"
+                          x-model="filterZip"
+                          x-on:change="filterLocations">
+                    <option value="any"
+                            x-text="t('ui.filters.zip-any')"></option>
+                    <template
+                      x-for="zip in zipCodes"
+                      :key="zip">
+                      <option x-bind:value="zip" 
+                              x-text="zip"></option>
+                    </template>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="mx-auto max-w-4xl">
+              <div class="relative mt-1">
+                <input type="text" 
+                       id="textFilter" 
+                       class="w-full pl-3 pr-10 py-2 border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:outline-none focus:border-blue-500 transition-colors" 
+                       x-bind:placeholder="t('ui.filters.search-anything')"
+                       x-model="filterSearch"
+                       x-on:input.debounce.500ms="filterLocations">
+                <button class="block w-7 h-7 text-center text-xl leading-0 absolute top-2 right-2 text-gray-400 focus:outline-none hover:text-gray-900 transition-colors"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+
+            <!-- loading/error/no results displays-->
+            <div class="loader h-32 w-32"
+                 x-show="isLoading"></div>
+            <div class="text-xl w-full text-center"
+               x-show="isLoading"
+               x-text="t('ui.loading')"></div>
+
+            <div class="text-xl w-full text-center"
+               x-show="errorState">
+              <p class="text-9xl text-red-500">
+                <i class="fas fa-exclamation-triangle"></i>
+              </p>
+              <p class="text-2xl"
+                 x-text="t('ui.load-failed')"></p>
+            </div>
+
+            <div class="text-xl w-full text-center"
+               x-show="(!filteredLocationAvailability || filteredLocationAvailability.length === 0) && !isLoading && !errorState">
+              <p class="text-9xl text-blue-500">
+                <!-- the "missing icon" icon is better for this than any real icon tbh -->
+                <i class="fas fa-broken-on-purpose"></i> 
+              </p>
+              <p class="text-2xl"
+                 x-text="t('ui.no-data')"></p>
+            </div>
+              
+            <!-- main content list -->
+            <div x-show="filteredLocationAvailability && !isLoading">
+
+              <template
+                x-for="location in filteredLocationAvailability"
+                :key="location.uuid">
+
+                <div class="mt-6">
+                  <div class="mx-auto max-w-6xl px-10 py-6 bg-white rounded-lg shadow-md">
+                    <div class="flex justify-between items-center">
+                      <p class="text-sm">
+                        <span x-text="location.lastUpdatedString"></span>
+                      </p>
+                      <span class="px-2 py-1 bg-gray-600 text-gray-100 font-bold rounded"
+                            x-text="t('location.type.' + location.siteType)"></span>
+                    </div>
+                    <div class="mt-2">
+                      <h1 class="text-3xl font-bold"
+                          x-text="location.name"></h1>
+                      <address class="text-lg">
+                        <a x-bind:href="getMapsUrl(location.address)" target="_blank">
+                          <span x-text="location.address"></span>
+                          <i class="fas fa-map-marked-alt"></i>
+                        </a>
+                      </address>
+
+                      <dl class="siteDetails">
+                        <dt x-text="t('ui.serves')"></dt>
+                        <dd x-text="location.serves"></dd>
+
+                        <dt x-text="t('ui.availability')"></dt>
+                        <dd>
+                          <table class="availabilityTable"
+                                 x-show="location.hasAvailability">
+                            <thead>
+                              <tr>
+                                <td x-text="t('ui.date')"></td>
+                                <td x-text="t('ui.availability')"></td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <template x-for="time in location.availability.times">
+                                <tr>
+                                  <td x-show="time.allDay"
+                                      x-text="localizeDate(time.date, true)"></td>
+                                  <td x-show="!time.allDay"
+                                      x-text="localizeDate(time.date, true)"></td>
+
+                                  <td x-show="time.slots !== null"
+                                      x-text="time.slots"></td>
+                                  <td x-show="time.slots === null"
+                                      x-text="t('ui.yes')"></td>
+                                </tr>
+                              </template>
+                            </tbody>
+                          </table>
+
+                          <p x-show="!location.hasAvailability"
+                             x-text="t('ui.none')"></p>
+                        </dd>
+
+                        <div x-show="location.siteInstructions">
+                          <dt x-text="t('ui.instructions')"></dt>
+                          <dd x-text="location.siteInstructions"></dd>
+                        </div>
+
+                        <div x-show="location.accessibility">
+                          <dt x-text="t('ui.accessibility')"></dt>
+                          <dd x-text="location.accessibility"></dd>
+                        </div>
+                      </dl>
+
+                    </div>
+
+                    <div class="flex justify-between items-center mt-4">
+                      <a class="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md"
+                         x-show="location.hasAvailability"
+                         x-bind:href="location.linkUrl">
+                        <i class="fas fa-calendar-plus"></i>&nbsp;<span x-text="t('ui.schedule')"></span> 
+                      </a>
+
+                      <a class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md"
+                         x-show="window.notificationsEnabled && !location.hasAvailability"
+                         href="#">
+                        <i class="fas fa-bell"></i>&nbsp;<span x-text="t('ui.notify')"></span> 
+                      </a>
+
+                      <a class="py-2 px-4 bg-indigo-500 text-white rounded-lg shadow-md"
+                         x-show="!location.hasAvailability"
+                         x-bind:href="location.linkUrl"
+                         target="_blank">
+                        <i class="fas fa-external-link-alt"></i>&nbsp;<span x-text="t('ui.visit-link')"></span> 
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+              </template>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <footer class="px-6 py-2 bg-gray-800 text-gray-100">
+        <div class="flex flex-col justify-between items-center container mx-auto md:flex-row">
+          <a href="#"
+             class="text-2xl font-bold">Findvax.us</a>
+          <p class="mt-2 md:mt-0">Made in 2021 by @pettazz</p>
+          <div class="flex -mx-2 mt-4 mb-2 md:mt-0 md:mb-0">
+            <a href="#"
+               class="mx-2 text-gray-100 hover:text-gray-400">Contributions Welcome! </a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </body>
+</html>
