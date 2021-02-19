@@ -1,9 +1,11 @@
 {
   "ui": {
+    "about": "About",
     "availability": "Availability",
     "accessibility": "Accessibility",
+    "close": "Close",
+    "contribute": "Contribute!",
     "date": "Date",
-    "hello": "Hello!",
     "instructions": "Instructions",
     "load-failed": "There was an error loading the data. Please refresh the page to try again.",
     "loading": "Loading...",
@@ -29,5 +31,34 @@
       "indoor": "Indoor",
       "driveThrough": "Drive-Thru"
     }
+  },
+  "about-modal": {
+    "title": {
+      "feedback": "Problems? Questions?",
+      "hello": "Hello (from an appropriate social distance)",
+      "how": "How does it work?",
+      "what": "What is this?",
+      "who": "Who did this?",
+      "why": "Why?"
+    },
+    "intro": "This website displays the information collected by a tool that checks a series of vaccination locations every five minutes for available appointments. It was made to try to help people find appointments in one central place, rather than the many different websites and formats spread all over the internet. It is not associated with or endorsed by any government or company, and the owner makes no money from it; it's entirely something he made in his spare time, which he's got a lot of these days.",
+    "how.html": "Every five minutes a tool runs through a list of saved locations and tries to gather any information about available vaccine appointments that they list on their websites through a few different methods (scraping, API requests, etc). This site just organizes and shows the results. Sometimes the sites are down or incomplete, and many don't list any availability or hide it behind personal logins, so this page won't always be an exhaustive list, but hopefully it's a pretty extensive one. It's entirely open source code, so if you're interested you can <a href=\"https://github.com/pettazz/findvax-site\" target=\"_blank\">check out the GitHub repository</a>. And if you're so inclined, contributions (bug reports, pull-requests, text language translations, anything at all) are hugely welcome and appreciated! Click the <span class=\"font-bold\"><i class=\"fas fa-hands-helping\"></i> Contribute!</span> link in the top or bottom bars for more information.",
+    "feedback.html": "Any and all feedback is welcome: <a href=\"mailto:findvax.us@gmail.com\">send a message</a>!",
+    "who.html": "Right now this is the work of <a href=\"https://pettazz.com\" target=\"_blank\">one guy named Nick</a>, but if you've got some spare time, why not you too? There are a lot of ways to help out; click that <span class=\"font-bold\"><i class=\"fas fa-hands-helping\"></i> Contribute!</span> button in the top or bottom bars!",
+    "why.html": "Seeing the frustration of people trying to deal with the complicated mix and match of websites and services that made up the different vaccination sites all over the country, it seemed pretty obvious that we could do a better job of helping people find ways to get shots in their arms faster. So a computer nerd near Boston decided to apply his skills to something useful for once and made this thing. Plus he actually enjoys doing this kind of stuff. Can you believe that? What a dork."
+  },
+  "contributing-modal": {
+    "title": {
+      "code": "Code",
+      "heading": "Contributions Welcome",
+      "share": "Share",
+      "suggestions": "Bug Reports/Feature Requests",
+      "translation": "Translation"
+    },
+    "intro": "There are lots of ways to help out, coding or otherwise! This is a completely free and open source project currently run by one person, so contributions of any kind are greatly appreciated.",
+    "translation.html": "This site should be displayed to you in whatever language the rest of your device uses, falling back to English if it's not available. Right now those languages are limited since the guy who made this only really speaks one. It's a surprisingly small amount of text that needs translating, so if you're fluent in anything other than English and willing to do a few lines, please <a href=\"mailto:findvax.us@gmail.com\">send a message</a>!",
+    "code.html": "This whole thing is entirely open source. The entire process relies on adding and maintaining as many scrapers for as many different location types as possible. The intention is that this could be expanded to any state in the US (and possibly adapted elsewhere), so if you have some programming knowledge there's always more that needs doing in the <a href=\"https://github.com/pettazz/findvax-site\" target=\"_blank\">GitHub repositories</a>.",
+    "suggestions.html": "Something not working right or the way you'd expect? Have an idea for a way to make it better? Any and all feedback is welcome: <a href=\"mailto:findvax.us@gmail.com\">send a message</a>!",
+    "share.html": "Send the link to someone you know who's looking for a vaccine; let's find one for everyone!"
   }
 }

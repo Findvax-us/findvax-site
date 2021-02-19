@@ -30,6 +30,34 @@ address a{
   }
 }
 
+main.about-panel{
+  h3{
+    @apply mb-1 font-bold;
+  }
+
+  p{
+    @apply mb-5;
+
+    a{
+      @apply underline;
+    }
+  }
+}
+
+div.location-item{
+  @apply mx-auto
+         max-w-6xl
+         px-10
+         py-6 
+         rounded-lg 
+         shadow-md
+         bg-white;
+
+  &.unavailable{
+    @apply bg-gray-100; 
+  }
+}
+
 dl.siteDetails{
   @apply mb-5;
 
@@ -66,4 +94,13 @@ dl.siteDetails{
 .toggle-checkbox:checked + .toggle-label {
   @apply: bg-green-400;
   background-color: #68D391;
+}
+
+/* override fa-inline for specific modal icon headers */
+.svg-inline--fa.header-icon{
+  margin-left: 1px;
+  margin-top: 12px;
+  @apply w-20 
+         h-20
+         fill-current;
 }
