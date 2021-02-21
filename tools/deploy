@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-if ! [ test -n "${var-}" ]; then 
+if [ -z "$AWSENV_CF_DISTRIBUTION" ]; then 
   echo "AWSENV_CF_DISTRIBUTION is not set, cannot continue." >&2
   exit 1
 fi
@@ -10,11 +10,15 @@ cd "$mydir/.."
 
 npm run build
 
-aws s3 sync ./dist s3://findvax-static\
+aws s3 sync ./dist s3://findvax-static-site\
+ --profile findvax\
  --delete\
- --exclude ".DS_Store"
+ --exclude ".DS_Store"\
+ --output json
 
 aws cloudfront create-invalidation\
+ --profile findvax\
   --distribution-id=$AWSENV_CF_DISTRIBUTION\
   --paths /\*\
-  > /dev/null
+  --output json\
+  | jq -r '.Invalidation'

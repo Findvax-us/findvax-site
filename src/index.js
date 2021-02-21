@@ -35,8 +35,8 @@ import './index.css';
 
 import { localei18n, shortLang } from './lang.js';
 
-const locationsURL = 'http://beemo.local:8888/verified-locations.json';
-const availabilityURL = 'http://beemo.local:8888/availability.json';
+const locationsURL = 'https://data.findvax.us/MA/locations.json';
+const availabilityURL = 'https://data.findvax.us/MA/availability.json';
 
 const polyglot = new Polyglot({phrases: localei18n});
 window.t = (key) => polyglot.t(key);

@@ -2,6 +2,7 @@ const path = require("path");
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -21,6 +22,15 @@ module.exports = {
       hash: true,
       template: './src/index.html',
       filename: 'index.html'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        './src/error.html',
+        './src/browserconfig.xml',
+        './src/site.webmanifest',
+        {from: './src/assets/ico/*', to: 'assets/ico/[name].[ext]'},
+        {from: './src/assets/img/*', to: 'assets/img/[name].[ext]'},
+      ]
     })
   ],
 
@@ -60,12 +70,6 @@ module.exports = {
         test: /\.(html)$/,
         use: [
           'html-loader'
-        ]
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader'
         ]
       },
       {
