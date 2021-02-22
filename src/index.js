@@ -115,27 +115,31 @@ window.locationsController = () => {
             console.error(err);
           })
       ]).then(() => {
-        this.locationAvailability = data.locations.map((location) => {
-          location.availability = data.availability.find(avail => avail.location === location.uuid) || null;
+        if(data.locations && data.locations.length > 0){
+          this.locationAvailability = data.locations.map((location) => {
+            location.availability = data.availability.find(avail => avail.location === location.uuid) || null;
 
-          this.zipCodes.add(location.zip);
+            this.zipCodes.add(location.zip);
 
-          // shortcuts for easier reference later
-          location.hasAvailability = location.availability && 
-                                     location.availability.times && 
-                                     location.availability.times.length > 0;
-          location.siteInstructions = location.siteInstructions.trim();
-          location.accessibility = location.accessibility.trim();
-          if(location.availability){
-            location.lastUpdatedString = window.t('ui.updated') + ' ' + 
-                                         Math.floor(
-                                          (new Date().getTime() - new Date(location.availability.fetched).getTime()) 
-                                          / (1000 * 60)
-                                        ) + ' ' + window.t('ui.mins-ago');
-          }
+            // shortcuts for easier reference later
+            location.hasAvailability = location.availability && 
+                                       location.availability.times && 
+                                       location.availability.times.length > 0;
+            location.siteInstructions = location.siteInstructions.trim();
+            location.accessibility = location.accessibility.trim();
+            if(location.availability){
+              location.lastUpdatedString = window.t('ui.updated') + ' ' + 
+                                           Math.floor(
+                                            (new Date().getTime() - new Date(location.availability.fetched).getTime()) 
+                                            / (1000 * 60)
+                                          ) + ' ' + window.t('ui.mins-ago');
+            }
 
-          return location;
-        });
+            return location;
+          });
+        }else{
+          this.locationAvailability = [];
+        }
         this.filterLocations();
 
         this.isLoading = false;
