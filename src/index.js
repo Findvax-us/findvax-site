@@ -96,7 +96,7 @@ window.locationsController = () => {
     filterSearch: null,
 
     locationAvailability: [],
-    zipCodes: new Set(),
+    zipCodes: [],
 
     filteredLocationAvailability: [],
 
@@ -120,10 +120,12 @@ window.locationsController = () => {
         let anyAvailability = false;
 
         if(data.locations && data.locations.length > 0){
+          let zipCodeSet = new Set();
+
           this.locationAvailability = data.locations.map((location) => {
             location.availability = data.availability.find(avail => avail.location && avail.location === location.uuid) || null;
 
-            this.zipCodes.add(location.zip);
+            zipCodeSet.add(location.zip);
 
             // shortcuts for easier reference later
             location.hasAvailability = location.availability && 
@@ -148,6 +150,8 @@ window.locationsController = () => {
 
             return location;
           });
+
+          this.zipCodes = Array.from(zipCodeSet).sort();
         }else{
           this.locationAvailability = [];
         }
