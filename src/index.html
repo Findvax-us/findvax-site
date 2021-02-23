@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title x-text="Findvax.us: Find A Vaccine Appointment"></title>
+    <title>Findvax.us: Find A Vaccine Appointment</title>
 
     <meta name="description" content="One single site to help find COVID vaccine availability near you."/> 
     <meta name="keywords" content="vaccine, covid, coronavirus, vax, search, notifications">
@@ -239,13 +239,14 @@
               </div>
             </div>
 
-            <!-- loading/error/no results displays-->
+            <!-- loading -->
             <div class="loader h-32 w-32"
                  x-show="isLoading"></div>
             <div class="text-xl w-full text-center"
                x-show="isLoading"
                x-text="t('ui.loading')"></div>
 
+            <!-- fatal error -->
             <div class="text-xl w-full text-center"
                x-show="errorState">
               <p class="text-9xl text-red-500">
@@ -255,8 +256,19 @@
                  x-text="t('ui.load-failed')"></p>
             </div>
 
+            <!-- no data matching current filters -->
             <div class="text-xl w-full text-center"
-               x-show="(!filteredLocationAvailability || filteredLocationAvailability.length === 0) && !isLoading && !errorState">
+               x-show="(!filteredLocationAvailability || filteredLocationAvailability.length === 0) && (locationAvailability && locationAvailability.length > 0) && !isLoading && !errorState">
+              <p class="text-9xl text-blue-500">
+                <i class="fas fa-stream"></i> 
+              </p>
+              <p class="text-2xl"
+                 x-text="t('ui.no-data-filtered')"></p>
+            </div>
+
+            <!-- no data at all -->
+            <div class="text-xl w-full text-center"
+               x-show="(!locationAvailability || locationAvailability.length === 0) && !isLoading && !errorState">
               <p class="text-9xl text-blue-500">
                 <!-- the "missing icon" icon is better for this than any real icon tbh -->
                 <i class="fas fa-broken-on-purpose"></i> 

@@ -13,7 +13,8 @@ import { faCalendarPlus,
          faHandsHelping,
          faVirusSlash,
          faTimesCircle,
-         faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+         faCheckCircle,
+         faStream } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faCalendarPlus, 
             faBell, 
@@ -26,7 +27,8 @@ library.add(faCalendarPlus,
             faHandsHelping,
             faVirusSlash,
             faTimesCircle,
-            faCheckCircle);
+            faCheckCircle,
+            faStream);
 dom.watch();
 
 import Polyglot from 'node-polyglot';
@@ -41,7 +43,7 @@ const availabilityURL = 'https://data.findvax.us/MA/availability.json';
 const polyglot = new Polyglot({phrases: localei18n});
 window.t = (key) => polyglot.t(key);
 
-window.notificationsEnabled = true;
+window.notificationsEnabled = false;
 
 window.isApple = () => /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) || navigator.platform === 'MacIntel';
 window.getMapsUrl = (address) =>{
@@ -115,9 +117,11 @@ window.locationsController = () => {
             console.error(err);
           })
       ]).then(() => {
+        let anyAvailability = false;
+
         if(data.locations && data.locations.length > 0){
           this.locationAvailability = data.locations.map((location) => {
-            location.availability = data.availability.find(avail => avail.location === location.uuid) || null;
+            location.availability = data.availability.find(avail => avail.location && avail.location === location.uuid) || null;
 
             this.zipCodes.add(location.zip);
 
@@ -128,17 +132,30 @@ window.locationsController = () => {
             location.siteInstructions = location.siteInstructions.trim();
             location.accessibility = location.accessibility.trim();
             if(location.availability){
-              location.lastUpdatedString = window.t('ui.updated') + ' ' + 
-                                           Math.floor(
-                                            (new Date().getTime() - new Date(location.availability.fetched).getTime()) 
-                                            / (1000 * 60)
-                                          ) + ' ' + window.t('ui.mins-ago');
+              const updatedMins = Math.floor(
+                                    (new Date().getTime() - new Date(location.availability.fetched).getTime()) 
+                                    / (1000 * 60));
+              let agoString;
+              if(updatedMins === 1){
+                agoString = window.t('ui.min-ago');
+              }else{
+                agoString = window.t('ui.mins-ago');
+              }
+              location.lastUpdatedString = `${window.t('ui.updated')} ${updatedMins} ${agoString}`;
             }
+
+            anyAvailability = location.hasAvailability || anyAvailability;
 
             return location;
           });
         }else{
           this.locationAvailability = [];
+        }
+
+        if(!anyAvailability){
+          // if there is no availability at any location, turn this filter's
+          //  default to off so the first thing we display to the user isn't "no data"
+          this.filterShowOnlyAvailable = false;
         }
         this.filterLocations();
 
