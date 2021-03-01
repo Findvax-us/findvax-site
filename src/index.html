@@ -72,10 +72,10 @@
             <div class="flex justify-center w-28 h-28 border-4 border-blue-600 rounded-full mb-4">
               <i class="fas fa-head-side-mask header-icon"></i>
             </div>
-            <h2 class="font-semibold text-2xl"
+            <h2 class="font-bold text-2xl"
                 x-text="t('about-modal.title.hello')"></h2>
           </header>
-          <main class="p-3 text-left about-panel">
+          <main class="text-left modal-panel">
 
             <h3 x-text="t('about-modal.title.what')"></h3>
             <p x-text="t('about-modal.intro')"></p>
@@ -95,7 +95,7 @@
           </main>
           <footer class="flex justify-center bg-transparent">
             <button
-              class="bg-blue-600 font-semibold text-white py-3 w-full rounded-b-md hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              class="bg-blue-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
               x-data
               @click="$store.modals.about.open = false"
               x-text="t('ui.close')">
@@ -119,10 +119,10 @@
             <div class="flex justify-center w-28 h-28 border-4 border-yellow-600 rounded-full mb-4">
               <i class="fas fa-hands-helping header-icon"></i>
             </div>
-            <h2 class="font-semibold text-2xl"
+            <h2 class="font-bold text-2xl"
                 x-text="t('contributing-modal.title.heading')"></h2>
           </header>
-          <main class="p-3 text-left about-panel">
+          <main class="text-left modal-panel">
 
             <p x-text="t('contributing-modal.intro')"></p>
 
@@ -141,13 +141,128 @@
           </main>
           <footer class="flex justify-center bg-transparent">
             <button
-              class="bg-yellow-600 font-semibold text-white py-3 w-full rounded-b-md hover:bg-yellow-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              class="bg-yellow-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-yellow-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
               x-data
               @click="$store.modals.contributing.open = false"
               x-text="t('ui.close')">
             </button>
           </footer>
         </div>
+
+        <!-- activity modal -->
+        <div
+          x-data
+          class="w-1/2 mx-auto relative bg-white shadow-lg rounded-lg text-black z-20"
+          x-show="$store.modals.activity.open"
+          x-transition:enter="transition transform duration-300"
+          x-transition:enter-start="scale-0"
+          x-transition:enter-end="scale-100"
+          x-transition:leave="transition transform duration-300"
+          x-transition:leave-start="scale-100"
+          x-transition:leave-end="scale-0">
+
+          <!-- loading -->
+          <header class="flex flex-col justify-center items-center p-3"
+                  x-show="$store.modals.activity.state === 'loading'">
+            <div class="flex justify-center w-28 h-28 mb-4">
+              <div class="loader h-20 w-20"></div>
+            </div>
+            <h3 class="font-bold text-2xl mt-4"
+                x-text="t('activity-modal.title.submitting')"></h3>
+          </header>
+
+          <!-- success -->
+          <header class="flex flex-col justify-center items-center p-3 text-green-600"
+                  x-show="$store.modals.activity.state === 'success'">
+            <div class="flex justify-center w-28 h-28 border-4 border-green-600 rounded-full mb-4">
+              <i class="fas fa-check-circle header-icon"></i>
+            </div>
+            <h3 class="font-bold text-2xl mt-4"
+                x-text="t('activity-modal.title.success')"></h3>
+          </header>
+
+          <!-- failure -->
+          <header class="flex flex-col justify-center items-center p-3 text-red-600"
+                  x-show="$store.modals.activity.state === 'failure'">
+            <div class="flex justify-center w-28 h-28 border-4 border-red-600 rounded-full mb-4">
+              <i class="fas fa-times-circle header-icon"></i>
+            </div>
+            <h3 class="font-bold text-2xl mt-4"
+                x-text="t('activity-modal.title.failure')"></h3>
+          </header>
+          <p class="p-3 text-left"
+             x-show="$store.modals.activity.state === 'failure'"
+             x-text="t('activity-modal.failure-detail')"></p>
+          
+          <footer class="flex justify-center bg-transparent">
+            <button
+              class="bg-blue-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              @click="$store.modals.activity.open = false"
+              x-show="$store.modals.activity.state !== 'loading'"
+              x-text="t('ui.close')">
+            </button>
+          </footer>
+        </div>
+
+        <!-- notification request modal -->
+        <div
+          x-data="notifyController()"
+          class="relative bg-white shadow-lg rounded-lg text-black z-20"
+          @request-notification.window="openModal($event.detail)"
+          @click.away="$store.modals.notify.open = false"
+          x-show="$store.modals.notify.open"
+          x-transition:enter="transition transform duration-300"
+          x-transition:enter-start="scale-0"
+          x-transition:enter-end="scale-100"
+          x-transition:leave="transition transform duration-300"
+          x-transition:leave-start="scale-100"
+          x-transition:leave-end="scale-0">
+          <header class="flex flex-col justify-center items-center p-3 text-purple-600">
+            <div class="flex justify-center w-28 h-28 border-4 border-purple-600 rounded-full mb-4">
+              <i class="fas fa-bell header-icon"></i>
+            </div>
+            <h2 class="font-bold text-2xl"
+                x-text="t('notify-modal.title.notify')"></h2>
+            <h3 class="font-bold text-black text-2xl mt-4"
+                x-text="reqLocation.name"></h3>
+          </header>
+          <main class="text-left modal-panel">
+
+            <p x-text="t('notify-modal.intro')"></p>
+            <form class="text-center mt-4"
+                  @submit.prevent="sendRequest()">
+              <label for="smsInput"
+                     x-text="t('notify-modal.input-label')"></label>
+              <div class="m-4 flex justify-center items-center">
+                <div class="flex">
+                  <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-black border-gray-200 focus:border-purple-300 bg-white" 
+                         id="smsInput"
+                         name="smsInput"
+                         placeholder="555-867-5309"
+                         type="tel"
+                         required
+                         maxlength="12"
+                         pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
+                         :title="t('notify-modal.input-title')"
+                         x-model="reqNumber"/>
+                  <button class="ml-0 px-8 rounded-r-lg bg-purple-600 text-white font-bold p-4 border-purple-600 border-t border-b border-r hover:bg-purple-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+                          x-text="t('notify-modal.submit')"></button>
+                </div>
+              </div>
+            </form>
+            
+            <p class="text-sm mt-4"
+               x-text="t('notify-modal.disclaimer')"></p>
+          </main>
+          <footer class="flex justify-center bg-transparent">
+            <button
+              class="bg-purple-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-purple-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              @click="$store.modals.notify.open = false"
+              x-text="t('ui.close')">
+            </button>
+          </footer>
+        </div>
+
 
       </div>
     </div>
@@ -367,13 +482,13 @@
                         <i class="fas fa-calendar-plus"></i>&nbsp;<span x-text="t('ui.schedule')"></span> 
                       </a>
 
-                      <a class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-700"
+                      <a class="py-2 px-4 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-700 cursor-pointer"
                          x-show="notificationsEnabled && !location.hasAvailability"
-                         href="#">
+                         @click="$dispatch('request-notification', location)">
                         <i class="fas fa-bell"></i>&nbsp;<span x-text="t('ui.notify')"></span> 
                       </a>
 
-                      <a class="py-2 px-4 bg-indigo-500 text-white rounded-lg shadow-md hover:bg-indigo-700"
+                      <a class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-700"
                          x-show="!location.hasAvailability"
                          x-bind:href="location.linkUrl"
                          target="_blank">

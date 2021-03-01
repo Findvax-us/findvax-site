@@ -7,7 +7,7 @@
     "contribute": "Contribute!",
     "date": "Date",
     "instructions": "Instructions",
-    "load-failed": "There was an error loading the data. Please refresh the page to try again.",
+    "load-failed": "There was an error loading the data. Please reload the page to try again.",
     "loading": "Loading...",
     "min-ago": "minute ago",
     "mins-ago": "minutes ago",
@@ -62,5 +62,25 @@
     "code.html": "This whole thing is entirely open source. The entire process relies on adding and maintaining as many scrapers for as many different location types as possible. The intention is that this could be expanded to any state in the US (and possibly adapted elsewhere), so if you have some programming knowledge there's always more that needs doing in the <a href=\"https://github.com/pettazz/findvax-site\" target=\"_blank\">GitHub repositories</a>.",
     "suggestions.html": "Something not working right or the way you'd expect? Have an idea for a way to make it better? Any and all feedback is welcome: <a href=\"mailto:findvax.us+feedback@gmail.com\">send a message</a>!",
     "share.html": "Send the link to someone you know who's looking for a vaccine; let's find one for everyone!"
+  },
+  "notify-modal": {
+    "title": {
+      "notify": "Notify Me"
+      
+    },
+    "submit": "Submit",
+    "input-title": "A US phone number including area code, e.g: 555-123-4567 or 5551234567",
+    "input-label": "Enter a US phone number including area code. For example: 555-123-4567 or 5551234567",
+    "intro": "Enter your phone number below and we'll send you a text the next time we see any available appointments at this location. We won't use your number for anything else, and delete it once we send you a message.",
+    
+    "disclaimer": "We are only able to send notifications to US (+1) numbers. Be sure that the number entered can receive SMS text messages. Messaging rates may apply. Once we send a notification for a location, that record is deleted; your phone number will only be stored until that time, and we collect no other identifying information."
+  },
+  "activity-modal": {
+    "title": {
+      "submitting": "Saving...",
+      "success": "Saved",
+      "failure": "Unable to Save"
+    },
+    "failure-detail": "There was a problem saving your request! Please reload the page and try again."
   }
 }
