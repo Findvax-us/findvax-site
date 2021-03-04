@@ -111,6 +111,7 @@ window.locationsController = () => {
     zipCodes: [],
 
     filteredLocationAvailability: [],
+    filteredLocationsWithAvailabilityString: '',
 
     fetchLocations(){
       let data = {};
@@ -178,6 +179,8 @@ window.locationsController = () => {
     },
 
     filterLocations(){
+      let counter = 0;
+
       this.filteredLocationAvailability = this.locationAvailability.filter((location) => {
         let valid = true;
 
@@ -195,8 +198,14 @@ window.locationsController = () => {
           valid = valid && textContent.toLowerCase().includes(this.filterSearch.toLowerCase());
         }
 
+        if(valid && location.hasAvailability){
+          counter++;
+        }
+
         return valid;
       })
+
+      this.filteredLocationsWithAvailabilityString = `${counter} ${t( counter === 1 ? 'ui.location-with-availability' : 'ui.locations-with-availability' )}`;
     }
   }
 }

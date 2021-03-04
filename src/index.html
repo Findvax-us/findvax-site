@@ -353,6 +353,13 @@
                 <button class="block w-7 h-7 text-center text-xl leading-0 absolute top-2 right-2 text-gray-400 focus:outline-none hover:text-gray-900 transition-colors"><i class="fas fa-search"></i></button>
               </div>
             </div>
+            <div class="mt-5 w-full text-center"
+               x-show="!isLoading && !errorState">
+              <p class="text-2xl text-black"
+                 x-text="filteredLocationsWithAvailabilityString">
+                <i class="fas fa-stream"></i> 
+              </p>
+            </div>
 
             <!-- loading -->
             <div class="loader h-32 w-32"
@@ -444,10 +451,7 @@
                             <tbody>
                               <template x-for="time in location.availability.times">
                                 <tr>
-                                  <td x-show="time.allDay"
-                                      x-text="localizeDate(time.date, true)"></td>
-                                  <td x-show="!time.allDay"
-                                      x-text="localizeDate(time.date, true)"></td>
+                                  <td x-text="localizeDate(time.date, !time.allDay)"></td>
 
                                   <td x-show="time.slots !== null"
                                       x-text="time.slots"></td>
