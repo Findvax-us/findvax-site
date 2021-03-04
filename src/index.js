@@ -130,7 +130,7 @@ window.locationsController = () => {
           let zipCodeSet = new Set();
 
           this.locationAvailability = data.locations.map((location) => {
-            location.availability = data.availability.find(avail => avail.location && avail.location === location.uuid) || null;
+            location.availability = data.availability.find(avail => avail.location && avail.location === location.uuid) || {times: []};
 
             zipCodeSet.add(location.zip);
 
@@ -141,16 +141,25 @@ window.locationsController = () => {
             location.siteInstructions = location.siteInstructions.trim();
             location.accessibility = location.accessibility.trim();
             if(location.availability){
-              const updatedMins = Math.floor(
-                                    (new Date().getTime() - new Date(location.availability.fetched).getTime()) 
-                                    / (1000 * 60));
-              let agoString;
-              if(updatedMins === 1){
-                agoString = window.t('ui.min-ago');
-              }else{
-                agoString = window.t('ui.mins-ago');
+
+              let updatedTime = Math.floor(
+                                  (new Date().getTime() - new Date(location.availability.fetched).getTime()) 
+                                  / 1000);
+              let agoString,
+                  incType = 'sec';
+
+              // if < 2 mins, show in seconds, else minutes
+              if(updatedTime >= 120){
+                updatedTime = Math.floor(updatedTime / 60);
+                incType = 'min';
               }
-              location.lastUpdatedString = `${window.t('ui.updated')} ${updatedMins} ${agoString}`;
+
+              if(updatedTime !== 1){
+                incType += 's';
+              }
+
+              agoString = window.t(`ui.${incType}-ago`);
+              location.lastUpdatedString = `${window.t('ui.updated')} ${updatedTime} ${agoString}`;
             }
 
             anyAvailability = location.hasAvailability || anyAvailability;

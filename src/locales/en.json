@@ -18,6 +18,8 @@
     "none": "None",
     "notify": "Notify Me",
     "schedule": "Schedule",
+    "sec-ago": "second ago",
+    "secs-ago": "seconds ago",
     "serves": "Serves",
     "updated": "Updated",
     "visit-link": "Visit Site",
@@ -31,6 +33,9 @@
     }
   },
   "location": {
+    "caveats": {
+      "no-timeslots": "This location does not report specific time slots. Actual dates and times available may vary."
+    },
     "type": {
       "indoor": "Indoor",
       "driveThrough": "Drive-Thru"
