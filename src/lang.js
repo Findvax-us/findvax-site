@@ -1,11 +1,11 @@
 import locale_en from './locales/en.json';
-import locale_es from './locales/es.json';
-import locale_fr from './locales/fr.json';
+// import locale_es from './locales/es.json';
+// import locale_fr from './locales/fr.json';
 
 const availableLocales = {
   'en': locale_en,
-  'es': locale_es,
-  'fr': locale_fr
+  // 'es': locale_es,
+  // 'fr': locale_fr
 }
 
 const defaultLang = 'en';
