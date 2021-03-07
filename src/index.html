@@ -430,6 +430,15 @@
                         <dt x-text="t('ui.serves')"></dt>
                         <dd x-text="location.serves"></dd>
 
+                        <div class="mt-5 mb-5"
+                             x-show="location.caveats">
+                          <template x-for="caveat in location.caveats" :key="caveat">
+                            <div class="flex items-center mb-3 px-4 py-3 bg-yellow-300 text-gray-800 rounded">
+                              <i class="fa fa-info-circle mr-2"></i>&nbsp;<span x-text="t('location.caveats.' + caveat)"></span>
+                            </div>
+                          </template>
+                        </div>
+
                         <dt>
                           <span x-show="location.hasAvailability">
                             <i class="fas fa-check-circle text-green-500"></i>

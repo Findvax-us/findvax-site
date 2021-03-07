@@ -34,7 +34,9 @@
   },
   "location": {
     "caveats": {
-      "no-timeslots": "This location does not report specific time slots. Actual dates and times available may vary."
+      "no-timeslots": "This location does not report specific time slots. Actual dates and times available will vary.",
+      "nonspecific-location": "There are multiple matching addresses for this location. Be sure to double check the address on the site when booking your appointment.",
+      "high-turnover": "This location frequently reports small numbers of slots that change more quickly than we can detect. Actual availability may vary."
     },
     "type": {
       "indoor": "Indoor",

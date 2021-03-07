@@ -164,6 +164,8 @@ window.locationsController = () => {
 
             anyAvailability = location.hasAvailability || anyAvailability;
 
+            location.caveats = location.caveats || [];
+
             return location;
           });
 
