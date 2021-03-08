@@ -103,7 +103,7 @@ window.locationsController = () => {
     errorState: false,
     isLoading: true,
 
-    filterShowOnlyAvailable: true,
+    filterShowOnlyAvailable: false,
     filterZip: null,
     filterSearch: null,
 
@@ -112,6 +112,30 @@ window.locationsController = () => {
 
     filteredLocationAvailability: [],
     filteredLocationsWithAvailabilityString: '',
+
+    sortMethod: 'availability',
+
+    sortComparator(){
+      switch(this.sortMethod){
+        case 'availability':
+
+          return (left, right) => {
+            if(left.hasAvailability){
+              if(right.hasAvailability){
+                return 0;
+              }
+              return -1;
+            }else{
+              return 1;
+            }
+          };
+          
+          break;
+
+        default:
+          return (left, right) => 0;
+      }
+    },
 
     fetchLocations(){
       let data = {};
@@ -174,11 +198,6 @@ window.locationsController = () => {
           this.locationAvailability = [];
         }
 
-        if(!anyAvailability){
-          // if there is no availability at any location, turn this filter's
-          //  default to off so the first thing we display to the user isn't "no data"
-          this.filterShowOnlyAvailable = false;
-        }
         this.filterLocations();
 
         this.isLoading = false;
@@ -214,7 +233,9 @@ window.locationsController = () => {
         }
 
         return valid;
-      })
+      });
+
+      this.filteredLocationAvailability.sort(this.sortComparator());
 
       this.filteredLocationsWithAvailabilityString = `${counter} ${t( counter === 1 ? 'ui.location-with-availability' : 'ui.locations-with-availability' )}`;
     }
