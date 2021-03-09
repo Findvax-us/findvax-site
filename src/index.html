@@ -323,23 +323,7 @@
                   <label for="toggleAvailableOnly" 
                          x-text="t('ui.filters.available-only')"></label>
                 </div>
-                <div>
-                  <label for="toggleZip"
-                         x-text="t('ui.filters.zip')"></label>
-                  <select class="focus:ring-indigo-500 focus:border-indigo-500"
-                          id="toggleZip"
-                          x-model="filterZip"
-                          x-on:change="filterLocations">
-                    <option value="any"
-                            x-text="t('ui.filters.zip-any')"></option>
-                    <template
-                      x-for="zip in zipCodes"
-                      :key="zip">
-                      <option x-bind:value="zip" 
-                              x-text="zip"></option>
-                    </template>
-                  </select>
-                </div>
+                
               </div>
             </div>
             <div class="mx-auto max-w-4xl">
@@ -351,6 +335,28 @@
                        x-model="filterSearch"
                        x-on:input.debounce.500ms="filterLocations">
                 <button class="block w-7 h-7 text-center text-xl leading-0 absolute top-2 right-2 text-gray-400 focus:outline-none hover:text-gray-900 transition-colors"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+            <div class="mx-auto max-w-6xl"
+                 x-show="showZipRange">
+              <div class="flex items-center justify-evenly mx-auto max-w-6xl px-10 py-6">
+               <div>
+                  <label for="zipDistance"
+                         x-text="t('ui.filters.zipDistance')"></label>
+                  <select class="focus:ring-indigo-500 focus:border-indigo-500"
+                          id="zipDistance"
+                          x-model="filterZipRange"
+                          x-on:change="filterLocations">
+                    <option value="50">50</option>
+                    <option value="25">25</option>
+                    <option value="15">15</option>
+                    <option value="10">10</option>
+                    <option value="5">5</option>
+                  </select>
+                  <span x-text="t('ui.filters.miles-of')"></span>
+                  <span x-text="filterSearch"></span>
+                </div>
+                
               </div>
             </div>
             <div class="mt-5 w-full text-center"
@@ -404,7 +410,7 @@
 
               <template
                 x-for="location in filteredLocationAvailability"
-                :key="location.uuid">
+                :key="location">
 
                 <div class="mt-6">
                   <div :class="{'location-item': true, 'unavailable': !location.hasAvailability}">

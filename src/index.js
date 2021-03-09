@@ -1,3 +1,5 @@
+import turfDistance from '@turf/distance';
+import { point as turfPoint } from '@turf/helpers';
 import '@ryangjchandler/spruce';
 import 'alpinejs';
 
@@ -104,16 +106,27 @@ window.locationsController = () => {
     isLoading: true,
 
     filterShowOnlyAvailable: false,
-    filterZip: null,
     filterSearch: null,
+    showZipRange: false,
+    filterZipRange: 25,
 
     locationAvailability: [],
-    zipCodes: [],
 
     filteredLocationAvailability: [],
     filteredLocationsWithAvailabilityString: '',
 
     sortMethod: 'availability',
+
+    zipCodes: [],
+
+    getCoordsForZip(code){
+      const obj = this.zipCodes.find(zip => zip.zip === code);
+      if(obj){
+        return [obj.lng, obj.lat];
+      }else{
+        return null;
+      }
+    },
 
     sortComparator(){
       switch(this.sortMethod){
@@ -146,17 +159,17 @@ window.locationsController = () => {
           .then(json => data.locations = json),
         fetch(config.availabilityURL)
           .then(res => res.json())
-          .then(json => data.availability = json)
+          .then(json => data.availability = json),
+        fetch(config.zipCodesURL)
+          .then(res => res.json())
+          .then(json => this.zipCodes = json)
       ]).then(() => {
         let anyAvailability = false;
 
         if(data.locations && data.locations.length > 0){
-          let zipCodeSet = new Set();
 
           this.locationAvailability = data.locations.map((location) => {
             location.availability = data.availability.find(avail => avail.location && avail.location === location.uuid) || {times: []};
-
-            zipCodeSet.add(location.zip);
 
             // shortcuts for easier reference later
             location.hasAvailability = location.availability && 
@@ -193,7 +206,6 @@ window.locationsController = () => {
             return location;
           });
 
-          this.zipCodes = Array.from(zipCodeSet).sort();
         }else{
           this.locationAvailability = [];
         }
@@ -211,6 +223,9 @@ window.locationsController = () => {
     filterLocations(){
       let counter = 0;
 
+      const zipRegex = /^[0-9]{5}$/,
+            isFilterZip = this.filterSearch && zipRegex.test(this.filterSearch.trim());
+
       this.filteredLocationAvailability = this.locationAvailability.filter((location) => {
         let valid = true;
 
@@ -218,11 +233,17 @@ window.locationsController = () => {
           valid = valid && location.hasAvailability;
         }
 
-        if(this.filterZip && this.filterZip !== 'any'){
-          valid = valid && location.zip === this.filterZip;
+        if(isFilterZip){
+          this.showZipRange = true;
+          const from = turfPoint(this.getCoordsForZip(location.zip)),
+                to = turfPoint(this.getCoordsForZip(this.filterSearch));
+
+          valid = valid && turfDistance(from, to, {units: 'miles'}) <= this.filterZipRange;
+        }else{
+          this.showZipRange = false;
         }
 
-        if(this.filterSearch){
+        if(this.filterSearch && !isFilterZip){
           const textContent = `${location.name} ${location.address} ${location.siteInstructions} ${location.accessibility}`;
 
           valid = valid && textContent.toLowerCase().includes(this.filterSearch.toLowerCase());

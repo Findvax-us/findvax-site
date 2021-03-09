@@ -23,6 +23,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@ryangjchandler/spruce": "^2.6.3",
+    "@turf/distance": "^6.3.0",
+    "@turf/helpers": "^6.3.0",
     "alpinejs": "^2.8.0",
     "autoprefixer": "^10.2.4",
     "babel-loader": "^8.2.2",

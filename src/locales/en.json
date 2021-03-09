@@ -27,9 +27,9 @@
     "filters": {
       "available-only": "Show only locations with availability",
       "title": "Filter Options",
-      "zip": "Zip Code",
-      "zip-any": "Any",
-      "search-anything": "Search town, location name, etc..."
+      "zipDistance": "Locations within",
+      "miles-of": "miles of",
+      "search-anything": "Search Zip Code, City, Location name, etc..."
     }
   },
   "location": {
