@@ -71,6 +71,14 @@ dl.siteDetails{
   }
 }
 
+div.location-caveat{
+  span{
+    a{
+      @apply underline;
+    }
+  }
+}
+
 .loader {
   @apply ease-linear mx-auto rounded-full border-8 border-t-8 border-gray-200;
   border-top-color: #3498db;

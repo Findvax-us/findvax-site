@@ -36,7 +36,8 @@
     "caveats": {
       "no-timeslots": "This location does not report specific time slots. Actual dates and times available will vary.",
       "nonspecific-location": "There are multiple matching addresses for this location. Be sure to double check the address on the site when booking your appointment.",
-      "high-turnover": "This location frequently reports small numbers of slots that change more quickly than we can detect. Actual availability may vary."
+      "high-turnover": "This location frequently reports small numbers of slots that change more quickly than we can detect. Actual availability may vary.",
+      "massvax-preregistration.html": "The state of Massachusetts now uses a preregistration system for this location, and we may not see availability anymore. Please sign up for the state-run registration here: <a href=\"https://www.mass.gov/info-details/preregister-for-a-covid-19-vaccine-appointment\">https://www.mass.gov/info-details/preregister-for-a-covid-19-vaccine-appointment</a>"
     },
     "type": {
       "indoor": "Indoor",
