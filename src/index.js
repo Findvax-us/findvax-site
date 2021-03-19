@@ -169,7 +169,7 @@ window.locationsController = () => {
         if(data.locations && data.locations.length > 0){
 
           this.locationAvailability = data.locations.map((location) => {
-            location.availability = data.availability.find(avail => avail.location && avail.location === location.uuid) || {times: []};
+            location.availability = data.availability.find(avail => avail && avail.location && avail.location === location.uuid) || {times: []};
 
             // shortcuts for easier reference later
             location.hasAvailability = location.availability && 
