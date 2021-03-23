@@ -45,6 +45,7 @@ import { localei18n, shortLang } from './lang.js';
 import config from './config.js';
 
 const PAGE_US_STATE = location.pathname === '/' ? 'SELECT' : location.pathname.split('/')[1];
+window.PAGE_US_STATE = PAGE_US_STATE;
 
 const getDataURL = (type) => {
   // type should probably be an enum but this is already probably overkill
@@ -138,6 +139,8 @@ window.locationsController = () => {
 
     zipCodes: [],
 
+    stateInfo: {},
+
     getCoordsForZip(code){
       const obj = this.zipCodes.find(zip => zip.zip === code);
       if(obj){
@@ -181,7 +184,10 @@ window.locationsController = () => {
           .then(json => data.availability = json),
         fetch(getDataURL('zipCodes'))
           .then(res => res.json())
-          .then(json => this.zipCodes = json)
+          .then(json => this.zipCodes = json),
+        fetch(getDataURL('states'))
+          .then(res => res.json())
+          .then(json => this.stateInfo = json.find(state => state.short === PAGE_US_STATE))
       ]).then(() => {
         let anyAvailability = false;
 
