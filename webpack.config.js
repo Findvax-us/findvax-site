@@ -4,9 +4,19 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const states = ['MA', 'RI'];
+
+const staticStatePages = states.map(state => {
+  return new HtmlWebpackPlugin({
+      hash: true,
+      template: './src/app.html',
+      filename: path.resolve(__dirname, "dist/" + state) + '/index.html'
+    })
+});
+
 module.exports = {
   entry: {
-    bundle: ["./src/index.js"]
+    bundle: ["./src/app.js"]
   },
 
   output: {
@@ -16,7 +26,7 @@ module.exports = {
 
   plugins: [
     new CleanWebpackPlugin({
-      cleanAfterEveryBuildPatterns: ['!*.woff2', '!*.jpg', '!*.png', '!*.gif', '!*.svg'],
+      cleanAfterEveryBuildPatterns: ['!*.woff2', '!*.jpg', '!*.png', '!*.gif'],
     }),
     new HtmlWebpackPlugin({
       hash: true,
@@ -32,7 +42,7 @@ module.exports = {
         {from: './src/assets/img/*', to: 'assets/img/[name].[ext]'},
       ]
     })
-  ],
+  ].concat(staticStatePages),
 
   mode: "production",
   devtool: "source-map",

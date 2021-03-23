@@ -1,0 +1,559 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Findvax.us: Find A Vaccine Appointment</title>
+
+    <meta name="description" content="One single site to help find COVID vaccine availability near you."/> 
+    <meta name="keywords" content="vaccine, covid, coronavirus, vax, search, notifications">
+
+    <link rel="icon" sizes="192x192" href="https://findvax.us/assets/ico/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://findvax.us/assets/ico/icon-180.png">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="https://findvax.us/assets/ico/icon-180.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://findvax.us/assets/ico/icon-144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://findvax.us/assets/ico/icon-114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://findvax.us/assets/ico/icon-72.png">
+    <link rel="apple-touch-icon-precomposed" href="https://findvax.us/assets/ico/icon-57.png">
+    <link rel="shortcut icon" href="https://findvax.us/assets/ico/favicon.ico">
+
+    <link rel="manifest" href="https://findvax.us/site.webmanifest">
+    <link rel="mask-icon" href="https://findvax.us/assets/ico/icon.svg" color="#212A39">
+    <meta name="application-name" content="Findvax.us" />
+    <meta name="msapplication-config" content="https://findvax.us/browserconfig.xml" />
+    <meta name="theme-color" content="#212A39">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Findvax.us: Find A Vaccine Appointment">
+    <meta name="twitter:description" content="One single site to help find COVID vaccine availability near you.">
+    <meta name="twitter:image" content="https://findvax.us/assets/img/share-image.jpg">
+    <!-- Open Graph -->
+    <meta property="og:image" content="https://findvax.us/assets/img/share-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600">
+    <meta property="og:title" content="Findvax.us: Find A Vaccine Appointment">
+    <meta property="og:description" content="One single site to help find COVID vaccine availability near you.">
+    <meta property="og:url" content="https://findvax.us">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Findvax.us">
+
+  </head>
+  <body class="bg-blue-100"
+        x-data
+        x-bind:class="{'overflow-hidden': $store.modals.isAnyOpen()}">
+
+    <!-- modals -->
+    <div
+      class="fixed inset-0 w-full h-full z-20 bg-black bg-opacity-50 duration-300 overflow-y-auto"
+      x-data
+      x-show="$store.modals.isAnyOpen()"
+      x-transition:enter="transition duration-300"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition duration-300"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"><!-- background -->
+
+      <div class="relative sm:w-3/4 md:w-2/3 lg:w-2/3 mx-2 sm:mx-auto my-10 opacity-100">
+
+      <!-- about modal -->
+        <div
+          x-data
+          class="relative bg-white shadow-lg rounded-lg text-black z-20"
+          @click.away="$store.modals.about.open = false"
+          x-show="$store.modals.about.open"
+          x-transition:enter="transition transform duration-300"
+          x-transition:enter-start="scale-0"
+          x-transition:enter-end="scale-100"
+          x-transition:leave="transition transform duration-300"
+          x-transition:leave-start="scale-100"
+          x-transition:leave-end="scale-0">
+          <header class="flex flex-col justify-center items-center p-3 text-blue-600">
+            <div class="flex justify-center w-28 h-28 border-4 border-blue-600 rounded-full mb-4">
+              <i class="fas fa-head-side-mask header-icon"></i>
+            </div>
+            <h2 class="font-bold text-2xl"
+                x-text="t('about-modal.title.hello')"></h2>
+          </header>
+          <main class="text-left modal-panel">
+
+            <h3 x-text="t('about-modal.title.what')"></h3>
+            <p x-text="t('about-modal.intro')"></p>
+
+            <h3 x-text="t('about-modal.title.how')"></h3>
+            <p x-html="t('about-modal.how.html')"></p>
+
+            <h3 x-text="t('about-modal.title.feedback')"></h3>
+            <p x-html="t('about-modal.feedback.html')"></p>
+            
+            <h3 x-text="t('about-modal.title.who')"></h3>
+            <p x-html="t('about-modal.who.html')"></p>
+            
+            <h3 x-text="t('about-modal.title.why')"></h3>
+            <p x-html="t('about-modal.why.html')"></p>
+            
+          </main>
+          <footer class="flex justify-center bg-transparent">
+            <button
+              class="bg-blue-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              x-data
+              @click="$store.modals.about.open = false"
+              x-text="t('ui.close')">
+            </button>
+          </footer>
+        </div>
+
+      <!-- contribute modal -->
+        <div
+          x-data
+          class="relative bg-white shadow-lg rounded-lg text-black z-20"
+          @click.away="$store.modals.contributing.open = false"
+          x-show="$store.modals.contributing.open"
+          x-transition:enter="transition transform duration-300"
+          x-transition:enter-start="scale-0"
+          x-transition:enter-end="scale-100"
+          x-transition:leave="transition transform duration-300"
+          x-transition:leave-start="scale-100"
+          x-transition:leave-end="scale-0">
+          <header class="flex flex-col justify-center items-center p-3 text-yellow-600">
+            <div class="flex justify-center w-28 h-28 border-4 border-yellow-600 rounded-full mb-4">
+              <i class="fas fa-hands-helping header-icon"></i>
+            </div>
+            <h2 class="font-bold text-2xl"
+                x-text="t('contributing-modal.title.heading')"></h2>
+          </header>
+          <main class="text-left modal-panel">
+
+            <p x-text="t('contributing-modal.intro')"></p>
+
+            <h3 x-text="t('contributing-modal.title.translation')"></h3>
+            <p x-html="t('contributing-modal.translation.html')"></p>
+
+            <h3 x-text="t('contributing-modal.title.code')"></h3>
+            <p x-html="t('contributing-modal.code.html')"></p>
+            
+            <h3 x-text="t('contributing-modal.title.suggestions')"></h3>
+            <p x-html="t('contributing-modal.suggestions.html')"></p>
+            
+            <h3 x-text="t('contributing-modal.title.share')"></h3>
+            <p x-html="t('contributing-modal.share.html')"></p>
+            
+          </main>
+          <footer class="flex justify-center bg-transparent">
+            <button
+              class="bg-yellow-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-yellow-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              x-data
+              @click="$store.modals.contributing.open = false"
+              x-text="t('ui.close')">
+            </button>
+          </footer>
+        </div>
+
+        <!-- activity modal -->
+        <div
+          x-data
+          class="w-1/2 mx-auto relative bg-white shadow-lg rounded-lg text-black z-20"
+          x-show="$store.modals.activity.open"
+          x-transition:enter="transition transform duration-300"
+          x-transition:enter-start="scale-0"
+          x-transition:enter-end="scale-100"
+          x-transition:leave="transition transform duration-300"
+          x-transition:leave-start="scale-100"
+          x-transition:leave-end="scale-0">
+
+          <!-- loading -->
+          <header class="flex flex-col justify-center items-center p-3"
+                  x-show="$store.modals.activity.state === 'loading'">
+            <div class="flex justify-center w-28 h-28 mb-4">
+              <div class="loader h-20 w-20"></div>
+            </div>
+            <h3 class="font-bold text-2xl mt-4"
+                x-text="t('activity-modal.title.submitting')"></h3>
+          </header>
+
+          <!-- success -->
+          <header class="flex flex-col justify-center items-center p-3 text-green-600"
+                  x-show="$store.modals.activity.state === 'success'">
+            <div class="flex justify-center w-28 h-28 border-4 border-green-600 rounded-full mb-4">
+              <i class="fas fa-check-circle header-icon"></i>
+            </div>
+            <h3 class="font-bold text-2xl mt-4"
+                x-text="t('activity-modal.title.success')"></h3>
+          </header>
+
+          <!-- failure -->
+          <header class="flex flex-col justify-center items-center p-3 text-red-600"
+                  x-show="$store.modals.activity.state === 'failure'">
+            <div class="flex justify-center w-28 h-28 border-4 border-red-600 rounded-full mb-4">
+              <i class="fas fa-times-circle header-icon"></i>
+            </div>
+            <h3 class="font-bold text-2xl mt-4"
+                x-text="t('activity-modal.title.failure')"></h3>
+          </header>
+          <p class="p-3 text-left"
+             x-show="$store.modals.activity.state === 'failure'"
+             x-text="t('activity-modal.failure-detail')"></p>
+          
+          <footer class="flex justify-center bg-transparent">
+            <button
+              class="bg-blue-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              @click="$store.modals.activity.open = false"
+              x-show="$store.modals.activity.state !== 'loading'"
+              x-text="t('ui.close')">
+            </button>
+          </footer>
+        </div>
+
+        <!-- notification request modal -->
+        <div
+          x-data="notifyController()"
+          class="relative bg-white shadow-lg rounded-lg text-black z-20"
+          @request-notification.window="openModal($event.detail)"
+          @click.away="$store.modals.notify.open = false"
+          x-show="$store.modals.notify.open"
+          x-transition:enter="transition transform duration-300"
+          x-transition:enter-start="scale-0"
+          x-transition:enter-end="scale-100"
+          x-transition:leave="transition transform duration-300"
+          x-transition:leave-start="scale-100"
+          x-transition:leave-end="scale-0">
+          <header class="flex flex-col justify-center items-center p-3 text-purple-600">
+            <div class="flex justify-center w-28 h-28 border-4 border-purple-600 rounded-full mb-4">
+              <i class="fas fa-bell header-icon"></i>
+            </div>
+            <h2 class="font-bold text-2xl"
+                x-text="t('notify-modal.title.notify')"></h2>
+            <h3 class="font-bold text-black text-2xl mt-4"
+                x-text="reqLocation.name"></h3>
+          </header>
+          <main class="text-left modal-panel">
+
+            <p x-text="t('notify-modal.intro')"></p>
+            <form class="text-center mt-4"
+                  @submit.prevent="sendRequest()">
+              <label for="smsInput"
+                     x-text="t('notify-modal.input-label')"></label>
+              <div class="m-4 flex justify-center items-center">
+                <div class="flex">
+                  <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-black border-gray-200 focus:border-purple-300 bg-white" 
+                         id="smsInput"
+                         name="smsInput"
+                         placeholder="555-867-5309"
+                         type="tel"
+                         required
+                         maxlength="12"
+                         pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
+                         :title="t('notify-modal.input-title')"
+                         x-model="reqNumber"/>
+                  <button class="ml-0 px-8 rounded-r-lg bg-purple-600 text-white font-bold p-4 border-purple-600 border-t border-b border-r hover:bg-purple-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+                          x-text="t('notify-modal.submit')"></button>
+                </div>
+              </div>
+            </form>
+            
+            <p class="text-sm mt-4"
+               x-text="t('notify-modal.disclaimer')"></p>
+          </main>
+          <footer class="flex justify-center bg-transparent">
+            <button
+              class="bg-purple-600 font-bold text-white py-3 w-full rounded-b-md hover:bg-purple-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300"
+              @click="$store.modals.notify.open = false"
+              x-text="t('ui.close')">
+            </button>
+          </footer>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div><!-- main content container -->
+      <nav class="bg-white px-6 py-4 shadow">
+        <div class="flex flex-col container mx-auto md:flex-row md:items-center md:justify-between">
+          <div class="flex justify-between items-center">
+            <div>
+              <a href="https://findvax.us" class="text-gray-800 text-xl font-bold md:text-2xl"><i class="fas fa-virus-slash"></i> Findvax.us</a>
+            </div>
+          </div>
+          <div>
+            <div class="md:flex flex-col md:flex-row md:-mx-4">
+              <a x-data
+                 href="#" 
+                 @click="$store.modals.about.open = true"
+                 class="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0">
+                 <span><i class="fas fa-info-circle"></i></span>
+                 <span x-text="t('ui.about')"></span>
+               </a>
+            </div>
+            <div class="md:flex flex-col md:flex-row md:-mx-4">
+              <a x-data
+                 href="#" 
+                 @click="$store.modals.contributing.open = true"
+                 class="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0">
+                 <span><i class="fas fa-hands-helping"></i></span>
+                 <span x-text="t('ui.contribute')"></span>
+               </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="px-6 py-8">
+        <div class="flex container mx-auto">
+          <main class="w-full"
+               x-data="locationsController()"
+               x-init="() => { fetchLocations() }">
+              
+            <!-- filters section -->
+            <div class="mx-auto max-w-6xl">
+              <p class="text-xl font-bold text-gray-700 md:text-2xl"
+                  x-text="t('ui.filters.title')"></p>
+              <div class="flex items-center justify-evenly mx-auto max-w-6xl px-10 py-6">
+                <div>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                      <input type="checkbox" 
+                             name="toggleAvailableOnly" 
+                             id="toggleAvailableOnly" 
+                             class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                             x-model="filterShowOnlyAvailable"
+                             x-on:change="filterLocations"/>
+                      <label for="toggleAvailableOnly" 
+                             class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                  </div>
+                  <label for="toggleAvailableOnly" 
+                         x-text="t('ui.filters.available-only')"></label>
+                </div>
+                
+              </div>
+            </div>
+            <div class="mx-auto max-w-4xl">
+              <div class="relative mt-1">
+                <input type="text" 
+                       id="textFilter" 
+                       class="w-full pl-3 pr-10 py-2 border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:outline-none focus:border-blue-500 transition-colors" 
+                       x-bind:placeholder="t('ui.filters.search-anything')"
+                       x-model="filterSearch"
+                       x-on:input.debounce.500ms="filterLocations">
+                <button class="block w-7 h-7 text-center text-xl leading-0 absolute top-2 right-2 text-gray-400 focus:outline-none hover:text-gray-900 transition-colors"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+            <div class="mx-auto max-w-6xl"
+                 x-show="showZipRange">
+              <div class="flex items-center justify-evenly mx-auto max-w-6xl px-10 py-6">
+               <div>
+                  <label for="zipDistance"
+                         x-text="t('ui.filters.zipDistance')"></label>
+                  <select class="focus:ring-indigo-500 focus:border-indigo-500"
+                          id="zipDistance"
+                          x-model="filterZipRange"
+                          x-on:change="filterLocations">
+                    <option value="50">50</option>
+                    <option value="25">25</option>
+                    <option value="15">15</option>
+                    <option value="10">10</option>
+                    <option value="5">5</option>
+                  </select>
+                  <span x-text="t('ui.filters.miles-of')"></span>
+                  <span x-text="filterSearch"></span>
+                </div>
+                
+              </div>
+            </div>
+            <div class="mt-5 w-full text-center"
+               x-show="!isLoading && !errorState">
+              <p class="text-2xl text-black"
+                 x-text="filteredLocationsWithAvailabilityString">
+                <i class="fas fa-stream"></i> 
+              </p>
+            </div>
+
+            <!-- loading -->
+            <div class="loader h-32 w-32"
+                 x-show="isLoading"></div>
+            <div class="text-xl w-full text-center"
+               x-show="isLoading"
+               x-text="t('ui.loading')"></div>
+
+            <!-- fatal error -->
+            <div class="text-xl w-full text-center"
+               x-show="errorState">
+              <p class="text-9xl text-red-500">
+                <i class="fas fa-exclamation-triangle"></i>
+              </p>
+              <p class="text-2xl"
+                 x-text="t('ui.load-failed')"></p>
+            </div>
+
+            <!-- no data matching current filters -->
+            <div class="text-xl w-full text-center"
+               x-show="(!filteredLocationAvailability || filteredLocationAvailability.length === 0) && (locationAvailability && locationAvailability.length > 0) && !isLoading && !errorState">
+              <p class="text-9xl text-blue-500">
+                <i class="fas fa-stream"></i> 
+              </p>
+              <p class="text-2xl"
+                 x-text="t('ui.no-data-filtered')"></p>
+            </div>
+
+            <!-- no data at all -->
+            <div class="text-xl w-full text-center"
+               x-show="(!locationAvailability || locationAvailability.length === 0) && !isLoading && !errorState">
+              <p class="text-9xl text-blue-500">
+                <!-- the "missing icon" icon is better for this than any real icon tbh -->
+                <i class="fas fa-broken-on-purpose"></i> 
+              </p>
+              <p class="text-2xl"
+                 x-text="t('ui.no-data')"></p>
+            </div>
+              
+            <!-- main content list -->
+            <div x-show="filteredLocationAvailability && !isLoading">
+
+              <template
+                x-for="location in filteredLocationAvailability"
+                :key="location">
+
+                <div class="mt-6">
+                  <div :class="{'location-item': true, 'unavailable': !location.hasAvailability}">
+                    <div class="flex justify-between items-center">
+                      <p class="text-sm">
+                        <span x-text="location.lastUpdatedString"></span>
+                      </p>
+                      <span class="px-2 py-1 bg-gray-600 text-gray-100 font-bold rounded"
+                            x-text="t('location.type.' + location.siteType)"></span>
+                    </div>
+                    <div class="mt-2">
+                      <h1 class="text-3xl font-bold">
+                        <span x-text="location.name"></span>
+                      </h1>
+                      <address class="text-lg">
+                        <a x-bind:href="getMapsUrl(location.address)" target="_blank">
+                          <span x-text="location.address"></span>
+                          <i class="fas fa-map-marked-alt"></i>
+                        </a>
+                      </address>
+
+                      <dl class="siteDetails">
+                        <dt x-text="t('ui.serves')"></dt>
+                        <dd x-text="location.serves"></dd>
+
+                        <div class="mt-5 mb-5"
+                             x-show="location.caveats">
+                          <template x-for="caveat in location.caveats" :key="caveat">
+                            <div class="location-caveat flex items-center mb-3 px-4 py-3 bg-yellow-300 text-gray-800 rounded">
+                              <i class="fa fa-info-circle mr-2"></i>&nbsp;<span x-html="t('location.caveats.' + caveat)"></span>
+                            </div>
+                          </template>
+                        </div>
+
+                        <dt>
+                          <span x-show="location.hasAvailability">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                          </span>
+                          <span x-show="!location.hasAvailability">
+                            <i class="fas fa-times-circle text-red-500"></i>
+                          </span>
+                          <span x-text="t('ui.availability')"></span>
+                        </dt>
+                        <dd>
+                          <table class="availabilityTable"
+                                 x-show="location.hasAvailability">
+                            <thead>
+                              <tr>
+                                <td x-text="t('ui.date')"></td>
+                                <td x-text="t('ui.availability')"></td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <template x-for="time in location.availability.times">
+                                <tr>
+                                  <td x-text="localizeDate(time.date, !time.allDay)"></td>
+
+                                  <td x-show="time.slots !== null"
+                                      x-text="time.slots"></td>
+                                  <td x-show="time.slots === null"
+                                      x-text="t('ui.yes')"></td>
+                                </tr>
+                              </template>
+                            </tbody>
+                          </table>
+
+                          <p x-show="!location.hasAvailability"
+                             x-text="t('ui.none')"></p>
+                        </dd>
+
+                        <div x-show="location.siteInstructions">
+                          <dt x-text="t('ui.instructions')"></dt>
+                          <dd x-text="location.siteInstructions"></dd>
+                        </div>
+
+                        <div x-show="location.accessibility">
+                          <dt x-text="t('ui.accessibility')"></dt>
+                          <dd x-text="location.accessibility"></dd>
+                        </div>
+                      </dl>
+
+                    </div>
+
+                    <div class="flex justify-between items-center mt-4">
+                      <a class="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-700"
+                         x-show="location.hasAvailability"
+                         x-bind:href="location.linkUrl">
+                        <i class="fas fa-calendar-plus"></i>&nbsp;<span x-text="t('ui.schedule')"></span> 
+                      </a>
+
+                      <a class="py-2 px-4 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-700 cursor-pointer"
+                         x-show="notificationsEnabled && !location.hasAvailability"
+                         @click="$dispatch('request-notification', location)">
+                        <i class="fas fa-bell"></i>&nbsp;<span x-text="t('ui.notify')"></span> 
+                      </a>
+
+                      <a class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-700"
+                         x-show="!location.hasAvailability"
+                         x-bind:href="location.linkUrl"
+                         target="_blank">
+                        <i class="fas fa-external-link-alt"></i>&nbsp;<span x-text="t('ui.visit-link')"></span> 
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+              </template>
+
+            </div>
+
+          </main>
+        </div>
+      </div>
+
+      <footer class="px-6 py-2 bg-gray-800 text-gray-100">
+        <div class="flex flex-col justify-between items-center container mx-auto md:flex-row">
+          <a href="https://findvax.us" 
+             class="text-2xl font-bold">
+             <i class="fas fa-virus-slash"></i> Findvax.us
+          </a>
+          <p class="mt-2 md:mt-0">Made in 2021 by <a href="https://pettazz.com" target="_blank">pettazz</a></p>
+          <div class="flex -mx-2 mt-4 mb-2 md:mt-0 md:mb-0">
+            <a x-data
+               href="#" 
+               @click="$store.modals.about.open = true"
+               class="mx-2 text-gray-100 hover:text-gray-400">
+              <span><i class="fas fa-info-circle"></i></span>
+              <span x-text="t('ui.about')"></span>
+            </a>
+            <a x-data
+               href="#" 
+               @click="$store.modals.contributing.open = true"
+               class="mx-2 text-gray-100 hover:text-gray-400">
+              <span><i class="fas fa-hands-helping"></i></span>
+              <span x-text="t('ui.contribute')"></span>
+            </a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <script async defer data-domain="findvax.us" src="https://stats.findvax.us/js/index.js"></script>
+  </body>
+</html>

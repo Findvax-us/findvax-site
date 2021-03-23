@@ -114,3 +114,15 @@ div.location-caveat{
          h-20
          fill-current;
 }
+
+svg.state-icon{
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+
+  @apply w-full;
+
+  path{
+    @apply w-full;
+  }
+}

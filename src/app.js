@@ -33,13 +33,32 @@ library.add(faCalendarPlus,
             faStream);
 dom.watch();
 
+import stateIcon from './state-icons.js';
+window.stateIcon = stateIcon;
+
 import Polyglot from 'node-polyglot';
 
-import './index.css';
+import './app.css';
 
 import { localei18n, shortLang } from './lang.js';
 
 import config from './config.js';
+
+const PAGE_US_STATE = location.pathname === '/' ? 'SELECT' : location.pathname.split('/')[1];
+
+const getDataURL = (type) => {
+  // type should probably be an enum but this is already probably overkill
+  if(type === 'states'){
+    return `${config.dataBaseURL}/${config.dataFileNames[type]}`;
+  }else{
+    return `${config.dataBaseURL}/${PAGE_US_STATE}/${config.dataFileNames[type]}`;
+  }
+}
+
+const getAPIURL = (endpoint) => {
+  // pretty straightforward now but easier to expand later
+  return `${config.APIBaseURL}/${config.APIEndpoints[endpoint]}`;
+}
 
 const polyglot = new Polyglot({phrases: localei18n});
 window.t = (key) => polyglot.t(key);
@@ -154,13 +173,13 @@ window.locationsController = () => {
       let data = {};
 
       Promise.all([
-        fetch(config.locationsURL)
+        fetch(getDataURL('locations'))
           .then(res => res.json())
           .then(json => data.locations = json),
-        fetch(config.availabilityURL)
+        fetch(getDataURL('availability'))
           .then(res => res.json())
           .then(json => data.availability = json),
-        fetch(config.zipCodesURL)
+        fetch(getDataURL('zipCodes'))
           .then(res => res.json())
           .then(json => this.zipCodes = json)
       ]).then(() => {
@@ -284,7 +303,7 @@ window.notifyController = () => {
         lang: shortLang
       };
 
-      fetch(config.notifyAPIURL, {
+      fetch(getAPIURL('notify'), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -297,6 +316,29 @@ window.notifyController = () => {
           this.$store.modals.activity.state = 'failure';
           console.error(err);
         })
+    }
+  }
+}
+
+window.stateListController = () => {
+  return {
+    errorState: false,
+    isLoading: true,
+
+    states: [],
+
+    fetchStates(){
+      fetch(getDataURL('states'))
+           .then(res => res.json())
+           .then(json => {
+             this.states = json.filter(state => state.enabled);
+             this.isLoading = false;
+           })
+           .catch(err => {
+             console.error(err);
+             this.isLoading = false;
+             this.errorState = true;
+           });
     }
   }
 }

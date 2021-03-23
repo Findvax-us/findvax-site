@@ -4,7 +4,10 @@ module.exports = {
     content: [
       './src/index.html',
       './src/index.js',
-      './src/index.css'
+      './src/index.css',
+      './src/app.html',
+      './src/app.js',
+      './src/app.css'
     ]
   },
   darkMode: false, // or 'media' or 'class'
