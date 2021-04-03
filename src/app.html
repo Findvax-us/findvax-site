@@ -314,11 +314,12 @@
                         x-text="t('states.' + stateInfo.short)">
                   </span>
                   <span x-text="t('ui.state-eligibility-info')">
-                  </span>
+                  </span><br />
                   <a class="underline hover:text-black" 
                      :href="stateInfo.url" 
-                     x-text="stateInfo.url" 
+                     :title="stateInfo.url" 
                      target="_blank">
+                    <span x-text="stateInfo.short"></span> <span x-text="t('ui.state-eligibility-url-title')"></span>
                   </a>
                 </div>
               </div>
